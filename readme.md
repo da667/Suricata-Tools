@@ -88,3 +88,7 @@ www.yeettheayys.cf
 ## Acknowledgements
 
 This script is heavily based on my (very) old dns2snort python script from way back in the day. I had significant help from @botnet_hunter and @3XPlo1T2. I also cribbed heavily off of the emerging threats DNS rules on the ET_OPEN rule feed to create my DNS rule templates, so shoutout to proofpoint ET_LABS. Finally, big thanks to OISF and their very meticulously documented "read the docs" site detailing pretty much everything you need to know about every Suricata rule option imaginable.
+
+## Licensing
+
+dns2suri is provided under MIT Licensing. Other tools added to this repo TBD.
