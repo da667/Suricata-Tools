@@ -17,7 +17,7 @@ dns2suri has three required arguments, and two optional arguments:
 - `-i`. **Required** argument. Defines input file. Tells dns2suri where the file containing your list of newline delimited DNS domains are located. Please be aware that dns2suri is capable of detecting and skipping both blank lines with no content, and comment lines that start with the octothorpe (#).
 - `-o`. **Required** argument. Defines output file. Tells dns2suri where to write your Suricata DNS rules.
 - `-s`. **Required** argument. Defines the suricata SID number to start numbering your rules from. Please select a sid from 9000000 - 9999999 to avoid SID number conflicts.
-- `-w`. Optional argument. Tells dns2suri to strip out 'www' from all DNS domains contained in the specified input file. For example, if your input file includes "www.youtube.com" dns2suri will create a rule for ".youtube.com", applying both the "dotprefix;" and "endswith;" modifiers, creating a rule that will hunt for subdomains of youtube.com such as "a.youtube.com, b.youtube.com", etc.
+- `-w`. Optional argument. Tells dns2suri to strip out 'www' from all DNS domains contained in the specified input file. For example, if your input file includes "www.youtube.com" dns2suri will create a rule for ".youtube.com", applying both the `dotprefix;` and `endswith;` modifiers, creating a rule that will hunt for subdomains of youtube.com such as a.youtube.com, b.youtube.com, etc.
 - `-h`. Optional argument. Displays help output.
 
 #### Other documentation:

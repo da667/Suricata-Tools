@@ -23,7 +23,7 @@ parser = argparse.ArgumentParser(
                      @3XPlo1T2
                 ---------------------
 Generates suricata DNS rules from a list of domains.
-Usage: dns2rule.py -i <infile> -o <outfile> -s 9000000
+Usage: dns2suri.py [-w] -i <infile> -o <outfile> -s 9000000
 Infile format:
 www.evil.com
 Outfile format:
