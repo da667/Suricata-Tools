@@ -58,6 +58,7 @@ ts_createdat = now.strftime("%Y_%m_%d")
 #This script iterates through each line (via for line loop).
 #If the line is empty or contains an octothorpe (#) ignore it.
 #If there is deadspace on the line that could cause problems with the suricata rule, strip it out.
+#For the msg portion of the rule, use the re module to insert a space in front of each period for the domain, in order to "sanitize" the message the alert produces to not cause more false positives on accident.
 #If the user invoked the -w option, strip out the 'www' portion of the domain they specified. 
 #We generate one of two types of rules, depending on if the first character of the domain begins with a period (.)
 #The first type of rule utilizes dotprefix and endswith to hunt for any subdomains of the domain specified.
@@ -72,10 +73,11 @@ with open(args.outfile, 'w') as fout:
                     continue
                 if args.www == True: 
                     domain = re.sub('^www', '', domain, flags=re.IGNORECASE)
+                msg = re.sub('\.', ' .', domain)
                 if domain.startswith('.'):
-                    rule = ("alert dns $HOME_NET any -> $EXTERNAL_NET any (msg:\"Suspicious DNS Lookup (%s)\"; dns.query; dotprefix; content:\"%s\" nocase; endswith; classtype:misc-activity; sid:%s; rev:1; metadata: created_at %s, deployment Perimeter;)" % (domain, domain, args.sid, ts_createdat))
+                    rule = ("alert dns $HOME_NET any -> $EXTERNAL_NET any (msg:\"Suspicious DNS Lookup (%s)\"; dns.query; dotprefix; content:\"%s\" nocase; endswith; classtype:misc-activity; sid:%s; rev:1; metadata: created_at %s, deployment Perimeter;)" % (msg, domain, args.sid, ts_createdat))
                 else:
-                    rule = ("alert dns $HOME_NET any -> $EXTERNAL_NET any (msg:\"Suspicious DNS Lookup (%s)\"; dns.query; content:\"%s\" nocase; bsize:%s; classtype:misc-activity; sid:%s; rev:1; metadata: created_at %s, deployment Perimeter;)" % (domain, domain, len(domain), args.sid, ts_createdat))
+                    rule = ("alert dns $HOME_NET any -> $EXTERNAL_NET any (msg:\"Suspicious DNS Lookup (%s)\"; dns.query; content:\"%s\" nocase; bsize:%s; classtype:misc-activity; sid:%s; rev:1; metadata: created_at %s, deployment Perimeter;)" % (msg, domain, len(domain), args.sid, ts_createdat))
                 fout.write(rule)
                 print (rule)
                 args.sid += 1

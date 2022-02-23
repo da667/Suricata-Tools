@@ -34,8 +34,10 @@ alert dns $HOME_NET any -> $EXTERNAL_NET any (msg:"Suspicious DNS Lookup (.4chan
 ```
 
 Hypothetically, this will match on:
+
 www.4chan.org
 boards.4chan.org
+
 ...and any other subdomain of 4chan.org. Thanks to the `dotprefix;` option, the rule will match on JUST subdomains of ".4chan.org", instead of say, "chan4chan.org" while the `endswith;` option ensures that every dns domain that this rule matches is a subdomain of 4chan.org. If this doesn't make any sense, Take a look at the OISF documentation here:
 
 dotprefix: https://suricata.readthedocs.io/en/suricata-6.0.4/rules/transforms.html?highlight=dotprefix#dotprefix
@@ -87,8 +89,12 @@ www.yeettheayys.cf
 
 ## Acknowledgements
 
-This script is heavily based on my (very) old dns2snort python script from way back in the day. I had significant help from @botnet_hunter and @3XPlo1T2. I also cribbed heavily off of the emerging threats DNS rules on the ET_OPEN rule feed to create my DNS rule templates, so shoutout to proofpoint ET_LABS. Finally, big thanks to OISF and their very meticulously documented "read the docs" site detailing pretty much everything you need to know about every Suricata rule option imaginable.
+dns2suri is heavily based on my (very) old dns2snort python script from way back in the day. I had significant help from @botnet_hunter and @3XPlo1T2. I also cribbed heavily off of the emerging threats DNS rules on the ET_OPEN rule feed to create my DNS rule templates, so shoutout to proofpoint ET_LABS. Finally, big thanks to OISF and their very meticulously documented "read the docs" site detailing pretty much everything you need to know about every Suricata rule option imaginable.
 
 ## Licensing
 
 dns2suri is provided under MIT Licensing. Other tools added to this repo TBD.
+
+## Patch Notes
+- 2022-02-23
+	- Realized that the msg portion of the rule should probably contain a "defanged" version of the domain, so I used some regex to insert a space in front of each period for each portion of a provided domain to make things a little bit safer.
