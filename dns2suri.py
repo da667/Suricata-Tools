@@ -15,7 +15,7 @@ import textwrap
 parser = argparse.ArgumentParser(
     formatter_class=argparse.RawDescriptionHelpFormatter,
     description=textwrap.dedent('''
-                    dns2snort.py
+                    dns2suri.py
                 Brought to you by:
                     @da_667
                 With Special Thanks from:
@@ -55,12 +55,13 @@ ts_createdat = now.strftime("%Y_%m_%d")
 
 #fout is the file we will be outputting our rules to.
 #f is the file we will read a list of domains from.
-#This script iterates through each line (via for line loop) and splits on periods (.), creating a list for each line.
-#The script calculates the segments of the domain in question (can handle 1-4 segments -- e.g. .ru (1 segments, TLD) all the way to this.is.evil.ru (4 segments))
-#Each segment of a domain has it's string length calculated and converted to hex.
-#If the segment is less than or equal to 0xf, this is converted to "0f" (padded with a zero, since snort rules expect this)
-#The hexidecmal letter is converted to upper case, and the rule is written to a file.
-#after the rule is written the SID number is incremented by 1 for the next rule.
+#This script iterates through each line (via for line loop).
+#If the line is empty or contains an octothorpe (#) ignore it.
+#If there is deadspace on the line that could cause problems with the suricata rule, strip it out.
+#If the user invoked the -w option, strip out the 'www' portion of the domain they specified. 
+#We generate one of two types of rules, depending on if the first character of the domain begins with a period (.)
+#The first type of rule utilizes dotprefix and endswith to hunt for any subdomains of the domain specified.
+#The second type of rule does an exact content match, and uses bsize to ensure that ONLY that domain matches the rule.
 
 with open(args.outfile, 'w') as fout:
     with open(args.infile, 'r') as f:
