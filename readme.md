@@ -16,7 +16,7 @@ A python script that will take a newline separated list of DNS domains and spit 
 dns2suri has three required arguments, and two optional arguments:
 - `-i`. **Required** argument. Defines input file. Tells dns2suri where the file containing your list of newline delimited DNS domains are located. Please be aware that dns2suri is capable of detecting and skipping both blank lines with no content, and comment lines that start with the octothorpe (#).
 - `-o`. **Required** argument. Defines output file. Tells dns2suri where to write your Suricata DNS rules.
-- `-s`. **Required** argument. Defines the suricata SID number to start numbering your rules from. Please select a sid from 9000000 - 9999999 to avoid SID number conflicts.
+- `-s`. **Required** argument. Defines the suricata SID number to start numbering your rules from. Please select a sid from 1000000 - 1999999 to avoid SID number conflicts.
 - `-w`. Optional argument. Tells dns2suri to strip out 'www' from all DNS domains contained in the specified input file. For example, if your input file includes "www.youtube.com" dns2suri will create a rule for ".youtube.com", applying both the `dotprefix;` and `endswith;` modifiers, creating a rule that will hunt for subdomains of youtube.com such as a.youtube.com, b.youtube.com, etc.
 - `-h`. Optional argument. Displays help output.
 
@@ -30,7 +30,7 @@ alert dns $HOME_NET any -> $EXTERNAL_NET any (msg:"Suspicious DNS Lookup (%s)"; 
 This rule format is meant to produce DNS rules that begin with a period (.) and are designed to hunt for sub-domains of the domain name specified. For example, if one of the lines in your input file (`-i`) contains ".4chan.org", This is the rule that would get generated:
 
 ```
-alert dns $HOME_NET any -> $EXTERNAL_NET any (msg:"Suspicious DNS Lookup (.4chan.org)"; dns.query; dotprefix; content:".4chan.org" nocase; endswith; classtype:misc-activity; sid:9000000; rev:1; metadata: created_at 2022_02_22, deployment Perimeter;)
+alert dns $HOME_NET any -> $EXTERNAL_NET any (msg:"Suspicious DNS Lookup (.4chan.org)"; dns.query; dotprefix; content:".4chan.org" nocase; endswith; classtype:misc-activity; sid:1000000; rev:1; metadata: created_at 2022_02_22, deployment Perimeter;)
 ```
 
 Hypothetically, this will match on:
@@ -52,7 +52,7 @@ alert dns $HOME_NET any -> $EXTERNAL_NET any (msg:"Suspicious DNS Lookup (%s)"; 
 This DNS rule template with provide an EXACT match on the DNS domain specified in the intput file. For example, the domain "www.youtube.com" will generate the following rule:
 
 ```
-alert dns $HOME_NET any -> $EXTERNAL_NET any (msg:"Suspicious DNS Lookup (www.youtube.com)"; dns.query; content:"www.youtube.com" nocase; bsize:15; classtype:misc-activity; sid:9000000; rev:1; metadata: created_at 2022_02_22, deployment Perimeter;)
+alert dns $HOME_NET any -> $EXTERNAL_NET any (msg:"Suspicious DNS Lookup (www.youtube.com)"; dns.query; content:"www.youtube.com" nocase; bsize:15; classtype:misc-activity; sid:1000000; rev:1; metadata: created_at 2022_02_22, deployment Perimeter;)
 ```
 
 Again, this rule will match on JUST the domain www.youtube.com. This is thanks to the `bsize` modifier. If you wanna know more about bsize, check out the read the docs info here:
@@ -98,3 +98,4 @@ dns2suri is provided under MIT Licensing. Other tools added to this repo TBD.
 ## Patch Notes
 - 2022-02-23
 	- Realized that the msg portion of the rule should probably contain a "defanged" version of the domain, so I used some regex to insert a space in front of each period for each portion of a provided domain to make things a little bit safer.
+	- Changed the SID range from 9000000-9999999 to 1000000-1999999 as this is the SID range reserved for local rules according to https://sidallocation.org/

@@ -23,11 +23,11 @@ parser = argparse.ArgumentParser(
                      @3XPlo1T2
                 ---------------------
 Generates suricata DNS rules from a list of domains.
-Usage: dns2suri.py [-w] -i <infile> -o <outfile> -s 9000000
+Usage: dns2suri.py [-w] -i <infile> -o <outfile> -s 1000000
 Infile format:
 www.evil.com
 Outfile format:
-alert dns $HOME_NET any -> $EXTERNAL_NET any (msg:"Suspicious DNS Lookup (www.evil.com)"; dns.query; content:"www.evil.com" nocase; bsize:12; classtype:misc-activity; sid:9000000; rev:1; metadata: created_at 2022_22_02, deployment Perimeter;)
+alert dns $HOME_NET any -> $EXTERNAL_NET any (msg:"Suspicious DNS Lookup (www.evil.com)"; dns.query; content:"www.evil.com" nocase; bsize:12; classtype:misc-activity; sid:1000000; rev:1; metadata: created_at 2022_22_02, deployment Perimeter;)
 '''))
 
 #Infile, outfile, and sid arguments via ArgParse are all required.
@@ -36,17 +36,17 @@ parser.add_argument('-i', dest="infile", required=True,
                     help="The name of the file containing a list of Domains, One domain per line.")
 parser.add_argument('-o', dest="outfile", required=True, help="The name of the file to output your suricata rules to.")
 parser.add_argument('-s', dest="sid", type=int, required=True,
-                    help="The suricata sid to start numbering incrementally at. This number should be between 9000000-9999999")
+                    help="The suricata sid to start numbering incrementally at. This number should be between 1000000-1999999")
 parser.add_argument('-w', dest="www", required=False, action='store_true', help="Remove the 'www' subdomain from domains that have it. This will apply the \"dotprefix;\" AND \"endswith;\" modifiers to all domains beginning with \"www\"")
 args = parser.parse_args()
 
-#This is a small check to ensure -s is set to a valid value between 9000000-9999999 - the local rules range.
+#This is a small check to ensure -s is set to a valid value between 1000000-1999999 - the local rules range according to https://sidallocation.org/
 
-if args.sid < 9000000:
-    print ("The Value for sid (-s) is less than 9000000.")
+if args.sid < 1000000:
+    print ("The Value for sid (-s) is less than 1000000.")
     exit()
-elif args.sid > 9999999:
-    print ("The Value for sid (-s) is greater than 9999999.")
+elif args.sid > 1999999:
+    print ("The Value for sid (-s) is greater than 1999999.")
     exit()
 
 #use datetime to establish the current year, month, and date for the created_at rule metadata
