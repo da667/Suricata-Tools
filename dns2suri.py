@@ -27,7 +27,7 @@ Usage: dns2suri.py [-w] -i <infile> -o <outfile> -s 1000000
 Infile format:
 www.evil.com
 Outfile format:
-alert dns $HOME_NET any -> $EXTERNAL_NET any (msg:"Suspicious DNS Lookup (www.evil.com)"; dns.query; content:"www.evil.com"; nocase; bsize:12; classtype:misc-activity; sid:1000000; rev:1; metadata: created_at 2022_22_02, deployment Perimeter;)
+alert dns $HOME_NET any -> $EXTERNAL_NET any (msg:"Suspicious DNS Lookup (www .evil .com)"; dns.query; content:"www.evil.com"; nocase; bsize:12; classtype:misc-activity; sid:1000000; rev:1; metadata: created_at 2022_22_02, deployment Perimeter;)
 '''))
 
 #Infile, outfile, and sid arguments via ArgParse are all required.
