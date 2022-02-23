@@ -27,7 +27,7 @@ Usage: dns2suri.py [-w] -i <infile> -o <outfile> -s 1000000
 Infile format:
 www.evil.com
 Outfile format:
-alert dns $HOME_NET any -> $EXTERNAL_NET any (msg:"Suspicious DNS Lookup (www.evil.com)"; dns.query; content:"www.evil.com" nocase; bsize:12; classtype:misc-activity; sid:1000000; rev:1; metadata: created_at 2022_22_02, deployment Perimeter;)
+alert dns $HOME_NET any -> $EXTERNAL_NET any (msg:"Suspicious DNS Lookup (www.evil.com)"; dns.query; content:"www.evil.com"; nocase; bsize:12; classtype:misc-activity; sid:1000000; rev:1; metadata: created_at 2022_22_02, deployment Perimeter;)
 '''))
 
 #Infile, outfile, and sid arguments via ArgParse are all required.
@@ -75,9 +75,9 @@ with open(args.outfile, 'w') as fout:
                     domain = re.sub('^www', '', domain, flags=re.IGNORECASE)
                 msg = re.sub('\.', ' .', domain)
                 if domain.startswith('.'):
-                    rule = ("alert dns $HOME_NET any -> $EXTERNAL_NET any (msg:\"Suspicious DNS Lookup (%s)\"; dns.query; dotprefix; content:\"%s\" nocase; endswith; classtype:misc-activity; sid:%s; rev:1; metadata: created_at %s, deployment Perimeter;)" % (msg, domain, args.sid, ts_createdat))
+                    rule = ("alert dns $HOME_NET any -> $EXTERNAL_NET any (msg:\"Suspicious DNS Lookup (%s)\"; dns.query; dotprefix; content:\"%s\"; nocase; endswith; classtype:misc-activity; sid:%s; rev:1; metadata: created_at %s, deployment Perimeter;)" % (msg, domain, args.sid, ts_createdat))
                 else:
-                    rule = ("alert dns $HOME_NET any -> $EXTERNAL_NET any (msg:\"Suspicious DNS Lookup (%s)\"; dns.query; content:\"%s\" nocase; bsize:%s; classtype:misc-activity; sid:%s; rev:1; metadata: created_at %s, deployment Perimeter;)" % (msg, domain, len(domain), args.sid, ts_createdat))
+                    rule = ("alert dns $HOME_NET any -> $EXTERNAL_NET any (msg:\"Suspicious DNS Lookup (%s)\"; dns.query; content:\"%s\"; nocase; bsize:%s; classtype:misc-activity; sid:%s; rev:1; metadata: created_at %s, deployment Perimeter;)" % (msg, domain, len(domain), args.sid, ts_createdat))
                 fout.write(rule)
                 print (rule)
                 args.sid += 1

@@ -25,12 +25,12 @@ dns2suri has three required arguments, and two optional arguments:
 - dns2suri provides two DNS rule templates, based on whether or not the domain begins with a "." or not:
 
 ```
-alert dns $HOME_NET any -> $EXTERNAL_NET any (msg:"Suspicious DNS Lookup (%s)"; dns.query; dotprefix; content:"%s" nocase; endswith; classtype:misc-activity; sid:%s; rev:1; metadata: created_at %s, deployment Perimeter;)
+alert dns $HOME_NET any -> $EXTERNAL_NET any (msg:"Suspicious DNS Lookup (%s)"; dns.query; dotprefix; content:"%s"; nocase; endswith; classtype:misc-activity; sid:%s; rev:1; metadata: created_at %s, deployment Perimeter;)
 ```
 This rule format is meant to produce DNS rules that begin with a period (.) and are designed to hunt for sub-domains of the domain name specified. For example, if one of the lines in your input file (`-i`) contains ".4chan.org", This is the rule that would get generated:
 
 ```
-alert dns $HOME_NET any -> $EXTERNAL_NET any (msg:"Suspicious DNS Lookup (.4chan.org)"; dns.query; dotprefix; content:".4chan.org" nocase; endswith; classtype:misc-activity; sid:1000000; rev:1; metadata: created_at 2022_02_22, deployment Perimeter;)
+alert dns $HOME_NET any -> $EXTERNAL_NET any (msg:"Suspicious DNS Lookup (.4chan.org)"; dns.query; dotprefix; content:".4chan.org"; nocase; endswith; classtype:misc-activity; sid:1000000; rev:1; metadata: created_at 2022_02_22, deployment Perimeter;)
 ```
 
 Hypothetically, this will match on:
@@ -46,13 +46,13 @@ endswith: https://suricata.readthedocs.io/en/suricata-6.0.4/rules/payload-keywor
 The OTHER rule template dns2suri generates looks like this:
 
 ```
-alert dns $HOME_NET any -> $EXTERNAL_NET any (msg:"Suspicious DNS Lookup (%s)"; dns.query; content:"%s" nocase; bsize:%s; classtype:misc-activity; sid:%s; rev:1; metadata: created_at %s, deployment Perimeter;)
+alert dns $HOME_NET any -> $EXTERNAL_NET any (msg:"Suspicious DNS Lookup (%s)"; dns.query; content:"%s"; nocase; bsize:%s; classtype:misc-activity; sid:%s; rev:1; metadata: created_at %s, deployment Perimeter;)
 ```
 
 This DNS rule template with provide an EXACT match on the DNS domain specified in the intput file. For example, the domain "www.youtube.com" will generate the following rule:
 
 ```
-alert dns $HOME_NET any -> $EXTERNAL_NET any (msg:"Suspicious DNS Lookup (www.youtube.com)"; dns.query; content:"www.youtube.com" nocase; bsize:15; classtype:misc-activity; sid:1000000; rev:1; metadata: created_at 2022_02_22, deployment Perimeter;)
+alert dns $HOME_NET any -> $EXTERNAL_NET any (msg:"Suspicious DNS Lookup (www.youtube.com)"; dns.query; content:"www.youtube.com"; nocase; bsize:15; classtype:misc-activity; sid:1000000; rev:1; metadata: created_at 2022_02_22, deployment Perimeter;)
 ```
 
 Again, this rule will match on JUST the domain www.youtube.com. This is thanks to the `bsize` modifier. If you wanna know more about bsize, check out the read the docs info here:
