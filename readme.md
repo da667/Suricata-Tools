@@ -166,9 +166,27 @@ www.yeettheayys.cf
 
 - Do not try to specify a wildcard hostname/SNI (e.g., \*.example.com). It won't work the way you think it will.
 
+### pcap_rewriter.py
+
+A python script that enables users to overwrite the source and destination IP addresses in a packet. The script will also delete the existing IP and TCP checksums and recalculate them, then output the new pcap to a new file. This might be relevant for those who are doing NSM testing, and need to change src/dst IP addresses for a packet capture for HOME/EXTERNAL_NET testing. This script requires users to install the scapy python module via pip.
+
+#### Usage:
+pcap_rewriter.py has four required arguments, and one optional argument:
+- `-i`. **Required** argument. Defines input PCAP file.
+- `-o`. **Required** argument. Defines output PCAP file.
+- `-s`. **Required** argument. Defines the source IP address to overwrite.
+- `-d`. **Required** argument. Defines the destination IP address to overwrite.
+- `-h`. Optional argument. Displays help output.
+
 ## Acknowledgements
 
-Most of the tools in this repo are heavily based on my (very) old dns2snort python script from way back in the day. I had significant help from @botnet_hunter and @3XPlo1T2. I also cribbed heavily off of the emerging threats DNS rules on the ET_OPEN rule feed to create my rule templates, so shoutout to proofpoint ET_LABS. Finally, big thanks to OISF and their very meticulously documented "read the docs" site detailing pretty much everything you need to know about every Suricata rule option imaginable.
+- Most of the tools in this repo are heavily based on my (very) old dns2snort python script from way back in the day. I had significant help from @botnet_hunter and @3XPlo1T2.
+- `pcap_rewriter.py` is essentially a fork of a project by @catalyst256
+	- Blog post here: https://cybernomad.online/2013/08/27/scapy-pcap-ip-rewrite/
+	- Original source here: https://github.com/catalyst256/MyJunk/blob/master/pcap-rewrite.py
+	- The code hadn't been touched in years so I decided to make it "python3-compatible (updated the print statements), and charged it from a positional argv script to an argpase script instead with an embedded help doc. Other than that, catalyst256 did all of the heavy lifting.
+- I also cribbed heavily off of the emerging threats DNS rules on the ET_OPEN rule feed to create my rule templates, so shoutout to proofpoint ET_LABS.
+- Finally, big thanks to OISF and their very meticulously documented "read the docs" site detailing pretty much everything you need to know about every Suricata rule option imaginable.
 
 ## Licensing
 
